@@ -24,8 +24,7 @@ body {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  padding: 0;
-  background: transparent);
+  pointer-events: none;
 }
 .brand {
   font-weight: 700;
@@ -57,16 +56,26 @@ body {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(to top, rgba(4,7,5,.98) 2%, rgba(4,7,5,.35) 55%, rgba(4,7,5,.08)),
-    url("carpintero-negro.jpg") center 72% / cover no-repeat;
+    linear-gradient(
+      to top, 
+      rgba(4,7,5,.98) 2%, 
+      rgba(4,7,5,.35) 55%, 
+      rgba(4,7,5,.08)
+    ),
+    url("carpintero-negro.jpg") center 58% / cover no-repeat;
 }
   @media (min-width: 900px) {
   .hero::before {
     left: 36%;
     width: 64%;
     background:
-      linear-gradient(to top, rgba(4,7,5,.72) 2%, rgba(4,7,5,.08) 55%, rgba(4,7,5,.02)),
-      url("carpintero-negro.jpg") center 58% / contain no-repeat;
+      linear-gradient(
+        to top, 
+        rgba(4,7,5,.72) 2%, 
+        rgba(4,7,5,.08) 55%, 
+        rgba(4,7,5,.02)
+      ),
+      url("carpintero-negro.jpg") center center / contain no-repeat;
     background-color: #0b100d;
    }
 }
@@ -188,4 +197,5 @@ footer {
     width: 150px;
     height: auto;
     display: block;
+    object-fit: contain;
 }
