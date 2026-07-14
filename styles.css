@@ -194,7 +194,7 @@ footer {
   .facts { grid-template-columns: repeat(2, 1fr); }
 }
 .logo{
-    width: 150px;
+    width: 185px;
     height: auto;
     display: block;
     object-fit: contain;
