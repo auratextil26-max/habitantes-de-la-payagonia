@@ -16,14 +16,16 @@ body {
   line-height: 1.6;
 }
 .topbar {
-  position: fixed;
-  inset: 0 0 auto 0;
+  position: absolute;
+  top: 18px;
+  left: 22px;
+  right: 22px;
   z-index: 20;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
-  padding: 18px 22px;
-  background: linear-gradient(to bottom, rgba(4,7,5,.92), transparent);
+  padding: 0;
+  background: transparent);
 }
 .brand {
   font-weight: 700;
