@@ -62,7 +62,7 @@ body {
   .hero::before {
     background:
       linear-gradient(to top, rgba(4,7,5,.98) 2%, rgba(4,7,5,.28) 55%, rgba(4,7,5,.06)),
-      url("carpintero-negro.jpg") center center / contain no-repeat;
+      url("carpintero-negro.jpg") 72% center / contain no-repeat;
     background-color: #0b100d;
   }
 }
