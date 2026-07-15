@@ -274,22 +274,30 @@ header.topbar > img.logo {
 }
 
 header.topbar > img.logo {
-    position: static !important;
+    position: absolute !important;
+    top: 18px !important;
+    left: 18px !important;
 
-    width: 120px !important;
-    min-width: 120px !important;
-    max-width: 120px !important;
+    width: 110px !important;
+    min-width: 110px !important;
+    max-width: 110px !important;
     height: auto !important;
 
     margin: 0 !important;
     padding: 0 !important;
     transform: none !important;
 
-    flex: 0 0 120px !important;
+    z-index: 30 !important;
 }
 
 header.topbar .edition {
-    margin-left: auto !important;
+    position: absolute !important;
+    top: 22px !important;
+    right: 20px !important;
+    left: auto !important;
+
+    margin: 0 !important;
+    z-index: 30 !important;
 }
   .hero::before {
         content: "";
