@@ -233,6 +233,13 @@ body {
     margin: 0;
   }
 }
-.logo {
-    display: none !important;
-}  
+.barra-superior .logo {
+    display: block !important;
+    width: 140px !important;
+    max-width: 140px !important;
+    height: auto !important;
+    max-height: 140px !important;
+    object-fit: contain !important;
+    position: static !important;
+    flex-shrink: 0 !important;
+}
