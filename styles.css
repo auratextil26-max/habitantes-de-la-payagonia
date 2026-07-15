@@ -233,3 +233,6 @@ body {
     margin: 0;
   }
 }
+.logo {
+    display: none !important;
+}  
