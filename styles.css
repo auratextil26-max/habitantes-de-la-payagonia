@@ -258,14 +258,14 @@ header.topbar > img.logo {
 }
 @media (max-width: 899px) {
   header.topbar > img.logo {
-        width: 170px !important;
-        min-width: 170px !important;
-        max-width: 170px !important;
+        width: 145px !important;
+        min-width: 145px !important;
+        max-width: 145px !important;
         height: auto !important;
 
         position: absolute !important;
-        top: 55px !important;
-        left: 28px !important;
+        top: 85px !important;
+        left: 20px !important;
 
         z-index: 10 !important;
   }
