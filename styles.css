@@ -320,4 +320,21 @@ header.topbar .edition {
         position: relative;
         z-index: 1;
     }
+  #playBtn {
+    width: auto !important;
+    min-width: 0 !important;
+    height: auto !important;
+
+    padding: 14px 22px !important;
+    border-radius: 999px !important;
+
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+
+    font-size: 16px !important;
+    line-height: 1.2 !important;
+    white-space: nowrap !important;
+}
 }
