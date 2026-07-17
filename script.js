@@ -1214,3 +1214,458 @@ audio.addEventListener('ended', () => {
     iniciarTransicionesCinematograficas();
   }
 })();
+/* =====================================================
+   FASE 3B — INFORMACIÓN EDUCATIVA: CARPINTERO NEGRO
+===================================================== */
+
+(() => {
+  function crearPanelCarpinteroNegro() {
+    const rutaActual = window.location.pathname.toLowerCase();
+
+    if (
+      !rutaActual.includes("carpintero-negro") ||
+      document.querySelector("#panel-educativo-especie")
+    ) {
+      return;
+    }
+
+    const estilos = document.createElement("style");
+
+    estilos.id = "estilos-panel-educativo";
+
+    estilos.textContent = `
+      .boton-conocer-especie {
+        position: fixed;
+        left: 28px;
+        bottom: 92px;
+        z-index: 9997;
+        min-height: 48px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        padding: 13px 20px;
+        background: rgba(7, 13, 9, 0.82);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        border-radius: 999px;
+        color: #ffffff;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        cursor: pointer;
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        box-shadow: 0 14px 38px rgba(0, 0, 0, 0.3);
+        transition:
+          background 0.25s ease,
+          color 0.25s ease,
+          transform 0.25s ease;
+      }
+
+      .boton-conocer-especie:hover {
+        background: #f6f5ef;
+        color: #071009;
+        transform: translateY(-2px);
+      }
+
+      .boton-conocer-especie span {
+        color: #c7e65b;
+        font-size: 20px;
+        font-weight: 400;
+        line-height: 1;
+      }
+
+      .panel-educativo-especie {
+        position: fixed;
+        inset: 0;
+        z-index: 40000;
+        display: flex;
+        align-items: stretch;
+        justify-content: flex-end;
+        background: rgba(2, 7, 4, 0);
+        visibility: hidden;
+        transition:
+          background 0.45s ease,
+          visibility 0.45s ease;
+      }
+
+      .panel-educativo-especie.visible {
+        background: rgba(2, 7, 4, 0.72);
+        visibility: visible;
+      }
+
+      .panel-educativo-contenido {
+        position: relative;
+        width: min(620px, 100%);
+        height: 100%;
+        overflow-y: auto;
+        padding: 76px 52px 52px;
+        background:
+          linear-gradient(
+            145deg,
+            rgba(20, 31, 23, 0.98),
+            rgba(6, 13, 8, 0.99)
+          );
+        border-left: 1px solid rgba(255, 255, 255, 0.14);
+        color: #ffffff;
+        transform: translateX(100%);
+        transition:
+          transform 0.65s cubic-bezier(.22, 1, .36, 1);
+        box-shadow: -30px 0 80px rgba(0, 0, 0, 0.4);
+      }
+
+      .panel-educativo-especie.visible
+      .panel-educativo-contenido {
+        transform: translateX(0);
+      }
+
+      .cerrar-panel-educativo {
+        position: absolute;
+        top: 22px;
+        right: 24px;
+        width: 46px;
+        height: 46px;
+        display: grid;
+        place-items: center;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        color: #ffffff;
+        font-size: 24px;
+        line-height: 1;
+        cursor: pointer;
+        transition:
+          background 0.25s ease,
+          transform 0.25s ease;
+      }
+
+      .cerrar-panel-educativo:hover {
+        background: rgba(255, 255, 255, 0.14);
+        transform: rotate(90deg);
+      }
+
+      .panel-etiqueta {
+        margin-bottom: 18px;
+        color: #c7e65b;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+      }
+
+      .panel-titulo {
+        margin-bottom: 10px;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(44px, 6vw, 68px);
+        font-weight: 400;
+        line-height: 0.98;
+        letter-spacing: -2.5px;
+      }
+
+      .panel-cientifico {
+        margin-bottom: 40px;
+        color: rgba(255, 255, 255, 0.6);
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 17px;
+        font-style: italic;
+      }
+
+      .panel-introduccion {
+        margin-bottom: 42px;
+        color: rgba(255, 255, 255, 0.78);
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 16px;
+        line-height: 1.75;
+      }
+
+      .datos-especie {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1px;
+        overflow: hidden;
+        margin-bottom: 34px;
+        background: rgba(255, 255, 255, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 18px;
+      }
+
+      .dato-especie {
+        min-height: 160px;
+        padding: 25px;
+        background: #0c1610;
+      }
+
+      .dato-icono {
+        display: block;
+        margin-bottom: 18px;
+        color: #c7e65b;
+        font-size: 22px;
+      }
+
+      .dato-especie h3 {
+        margin-bottom: 10px;
+        color: rgba(255, 255, 255, 0.55);
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+      }
+
+      .dato-especie p {
+        color: #ffffff;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 14px;
+        line-height: 1.6;
+      }
+
+      .dato-destacado {
+        padding: 28px;
+        background: #c7e65b;
+        border-radius: 18px;
+        color: #071009;
+      }
+
+      .dato-destacado span {
+        display: block;
+        margin-bottom: 12px;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 10px;
+        font-weight: 900;
+        letter-spacing: 1.6px;
+        text-transform: uppercase;
+      }
+
+      .dato-destacado p {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 23px;
+        line-height: 1.35;
+      }
+
+      body.panel-educativo-abierto {
+        overflow: hidden;
+      }
+
+      @media (max-width: 700px) {
+        .boton-conocer-especie {
+          left: 50%;
+          bottom: 82px;
+          width: max-content;
+          min-height: 42px;
+          padding: 10px 17px;
+          font-size: 9px;
+          transform: translateX(-50%);
+        }
+
+        .boton-conocer-especie:hover {
+          transform: translateX(-50%) translateY(-2px);
+        }
+
+        .panel-educativo-contenido {
+          width: 100%;
+          padding: 74px 20px 120px;
+          border-left: none;
+        }
+
+        .panel-titulo {
+          font-size: 48px;
+          letter-spacing: -2px;
+        }
+
+        .panel-cientifico {
+          margin-bottom: 28px;
+          font-size: 15px;
+        }
+
+        .panel-introduccion {
+          margin-bottom: 30px;
+          font-size: 15px;
+        }
+
+        .datos-especie {
+          grid-template-columns: 1fr;
+        }
+
+        .dato-especie {
+          min-height: auto;
+          padding: 23px;
+        }
+
+        .dato-destacado p {
+          font-size: 21px;
+        }
+      }
+    `;
+
+    document.head.appendChild(estilos);
+
+    const boton = document.createElement("button");
+
+    boton.type = "button";
+    boton.className = "boton-conocer-especie";
+    boton.setAttribute(
+      "aria-label",
+      "Conocer información del Carpintero Negro"
+    );
+
+    boton.innerHTML = `
+      Conocer la especie
+      <span>+</span>
+    `;
+
+    const panel = document.createElement("aside");
+
+    panel.id = "panel-educativo-especie";
+    panel.className = "panel-educativo-especie";
+    panel.setAttribute("aria-hidden", "true");
+
+    panel.innerHTML = `
+      <div
+        class="panel-educativo-contenido"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="titulo-panel-especie"
+      >
+        <button
+          type="button"
+          class="cerrar-panel-educativo"
+          aria-label="Cerrar información"
+        >
+          ×
+        </button>
+
+        <p class="panel-etiqueta">
+          PS—001 · Ficha de la especie
+        </p>
+
+        <h2
+          class="panel-titulo"
+          id="titulo-panel-especie"
+        >
+          Carpintero Negro
+        </h2>
+
+        <p class="panel-cientifico">
+          Campephilus magellanicus
+        </p>
+
+        <p class="panel-introduccion">
+          Es una de las aves más características de los bosques
+          templados del extremo sur de Sudamérica. Su presencia está
+          estrechamente relacionada con bosques nativos que conservan
+          árboles grandes, maduros y en distintos estados de
+          descomposición.
+        </p>
+
+        <div class="datos-especie">
+
+          <article class="dato-especie">
+            <span class="dato-icono">⌂</span>
+
+            <h3>Hábitat</h3>
+
+            <p>
+              Bosques nativos templados, especialmente formaciones
+              dominadas por coigüe, lenga, ñirre y araucaria.
+            </p>
+          </article>
+
+          <article class="dato-especie">
+            <span class="dato-icono">◌</span>
+
+            <h3>Alimentación</h3>
+
+            <p>
+              Se alimenta principalmente de larvas, insectos,
+              arañas y otros pequeños organismos que encuentra
+              dentro de la madera.
+            </p>
+          </article>
+
+          <article class="dato-especie">
+            <span class="dato-icono">⌖</span>
+
+            <h3>Distribución</h3>
+
+            <p>
+              Habita en Chile y Argentina. En Chile se encuentra
+              desde la zona centro-sur hasta Magallanes y
+              Tierra del Fuego.
+            </p>
+          </article>
+
+          <article class="dato-especie">
+            <span class="dato-icono">◇</span>
+
+            <h3>Conservación</h3>
+
+            <p>
+              Está clasificado globalmente como Preocupación Menor.
+              En Chile su clasificación y nivel de protección
+              varían según la zona geográfica.
+            </p>
+          </article>
+
+        </div>
+
+        <div class="dato-destacado">
+          <span>Importancia ecológica</span>
+
+          <p>
+            Las cavidades que excava para alimentarse, descansar
+            o anidar también pueden ser utilizadas posteriormente
+            por otras especies del bosque.
+          </p>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(boton);
+    document.body.appendChild(panel);
+
+    const botonCerrar =
+      panel.querySelector(".cerrar-panel-educativo");
+
+    function abrirPanel() {
+      panel.classList.add("visible");
+      panel.setAttribute("aria-hidden", "false");
+      document.body.classList.add("panel-educativo-abierto");
+    }
+
+    function cerrarPanel() {
+      panel.classList.remove("visible");
+      panel.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("panel-educativo-abierto");
+    }
+
+    boton.addEventListener("click", abrirPanel);
+    botonCerrar.addEventListener("click", cerrarPanel);
+
+    panel.addEventListener("click", evento => {
+      if (evento.target === panel) {
+        cerrarPanel();
+      }
+    });
+
+    document.addEventListener("keydown", evento => {
+      if (
+        evento.key === "Escape" &&
+        panel.classList.contains("visible")
+      ) {
+        cerrarPanel();
+      }
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener(
+      "DOMContentLoaded",
+      crearPanelCarpinteroNegro
+    );
+  } else {
+    crearPanelCarpinteroNegro();
+  }
+})();
