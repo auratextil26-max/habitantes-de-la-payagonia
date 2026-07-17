@@ -362,3 +362,8 @@ header.topbar .edition {
     transform: scale(1.15) translate3d(0.8%, -0.9%, 0);
   }
 }
+/* ESPACIO FINAL PARA QUE EL MENÚ NO TAPE EL FOOTER */
+
+body {
+  padding-bottom: calc(120px + env(safe-area-inset-bottom)) !important;
+}
