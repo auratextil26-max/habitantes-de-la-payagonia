@@ -268,3 +268,204 @@ audio.addEventListener('ended', () => {
     crearNavegacionEspecies();
   }
 })();
+/* =====================================================
+   FASE 2A — ANIMACIONES CINEMATOGRÁFICAS
+===================================================== */
+
+(() => {
+  function iniciarAnimacionesCinematograficas() {
+    const rutaActual = window.location.pathname.toLowerCase();
+
+    const esPaginaDeEspecie = [
+      "carpintero-negro",
+      "puma",
+      "flamenco",
+      "condor",
+      "guanaco",
+      "martin-pescador"
+    ].some(especie => rutaActual.includes(especie));
+
+    if (!esPaginaDeEspecie) {
+      return;
+    }
+
+    if (document.querySelector("#animaciones-cinematograficas")) {
+      return;
+    }
+
+    const estilos = document.createElement("style");
+
+    estilos.id = "animaciones-cinematograficas";
+
+    estilos.textContent = `
+      /* Estado inicial */
+
+      body:not(.experiencia-visible) .logo,
+      body:not(.experiencia-visible) h1,
+      body:not(.experiencia-visible) h1 + *,
+      body:not(.experiencia-visible) .species-code,
+      body:not(.experiencia-visible) .sound-button,
+      body:not(.experiencia-visible) button,
+      body:not(.experiencia-visible) .photo-credit {
+        opacity: 0;
+      }
+
+      body:not(.experiencia-visible) h1 {
+        transform: translateY(38px);
+      }
+
+      body:not(.experiencia-visible) .logo {
+        transform: translateY(-20px);
+      }
+
+      body:not(.experiencia-visible) h1 + *,
+      body:not(.experiencia-visible) .species-code,
+      body:not(.experiencia-visible) .sound-button,
+      body:not(.experiencia-visible) button {
+        transform: translateY(22px);
+      }
+
+      /* Entrada del logo */
+
+      body.experiencia-visible .logo {
+        animation: entradaLogo 1s cubic-bezier(.22, 1, .36, 1) both;
+      }
+
+      /* Código PS */
+
+      body.experiencia-visible .species-code {
+        animation: entradaElemento 0.8s ease 0.2s both;
+      }
+
+      /* Nombre de la especie */
+
+      body.experiencia-visible h1 {
+        animation: entradaTitulo 1.15s cubic-bezier(.22, 1, .36, 1) 0.25s both;
+      }
+
+      /* Nombre científico o texto siguiente */
+
+      body.experiencia-visible h1 + * {
+        animation: entradaElemento 0.9s ease 0.55s both;
+      }
+
+      /* Botón del sonido */
+
+      body.experiencia-visible .sound-button,
+      body.experiencia-visible button {
+        animation: entradaElemento 0.9s ease 0.75s both;
+      }
+
+      /* Crédito fotográfico */
+
+      body.experiencia-visible .photo-credit {
+        animation: aparecerSuave 1.2s ease 1s both;
+      }
+
+      /* Fotografía */
+
+      body.experiencia-visible .hero::before {
+        animation: entradaFotografia 1.8s cubic-bezier(.22, 1, .36, 1) both;
+      }
+
+      @keyframes entradaLogo {
+        from {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes entradaTitulo {
+        from {
+          opacity: 0;
+          transform: translateY(38px);
+          filter: blur(5px);
+        }
+
+        to {
+          opacity: 1;
+          transform: translateY(0);
+          filter: blur(0);
+        }
+      }
+
+      @keyframes entradaElemento {
+        from {
+          opacity: 0;
+          transform: translateY(22px);
+        }
+
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes aparecerSuave {
+        from {
+          opacity: 0;
+        }
+
+        to {
+          opacity: 1;
+        }
+      }
+
+      @keyframes entradaFotografia {
+        from {
+          opacity: 0;
+          transform: scale(1.075);
+          filter: brightness(0.72);
+        }
+
+        to {
+          opacity: 1;
+          transform: scale(1);
+          filter: brightness(1);
+        }
+      }
+
+      /* Respeta usuarios que desactivan animaciones */
+
+      @media (prefers-reduced-motion: reduce) {
+        body:not(.experiencia-visible) .logo,
+        body:not(.experiencia-visible) h1,
+        body:not(.experiencia-visible) h1 + *,
+        body:not(.experiencia-visible) .species-code,
+        body:not(.experiencia-visible) .sound-button,
+        body:not(.experiencia-visible) button,
+        body:not(.experiencia-visible) .photo-credit {
+          opacity: 1;
+          transform: none;
+        }
+
+        body.experiencia-visible *,
+        body.experiencia-visible .hero::before {
+          animation: none !important;
+        }
+      }
+    `;
+
+    document.head.appendChild(estilos);
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        document.body.classList.add("experiencia-visible");
+      });
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener(
+      "DOMContentLoaded",
+      iniciarAnimacionesCinematograficas
+    );
+  } else {
+    iniciarAnimacionesCinematograficas();
+  }
+})();
