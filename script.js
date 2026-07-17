@@ -2283,3 +2283,138 @@ audio.addEventListener('ended', () => {
     iniciarFichasDeEspecies();
   }
 })();
+/* =====================================================
+   FASE 4.1 — EFECTO KEN BURNS EN LAS FOTOGRAFÍAS
+===================================================== */
+
+(() => {
+  function iniciarEfectoKenBurns() {
+    const rutaActual = window.location.pathname.toLowerCase();
+
+    const esPaginaDeEspecie = [
+      "carpintero-negro",
+      "puma",
+      "flamenco",
+      "condor",
+      "guanaco",
+      "martin-pescador"
+    ].some(especie => rutaActual.includes(especie));
+
+    if (
+      !esPaginaDeEspecie ||
+      document.querySelector("#estilos-ken-burns")
+    ) {
+      return;
+    }
+
+    const estilos = document.createElement("style");
+
+    estilos.id = "estilos-ken-burns";
+
+    estilos.textContent = `
+      @keyframes kenBurnsAura {
+        0% {
+          transform: scale(1.01) translate3d(0, 0, 0);
+        }
+
+        50% {
+          transform: scale(1.065) translate3d(-0.6%, -0.4%, 0);
+        }
+
+        100% {
+          transform: scale(1.1) translate3d(0.5%, -0.8%, 0);
+        }
+      }
+
+      .ken-burns-aura {
+        animation: kenBurnsAura 22s ease-in-out infinite alternate;
+        transform-origin: center center;
+        will-change: transform;
+        backface-visibility: hidden;
+      }
+
+      @media (max-width: 700px) {
+        .ken-burns-aura {
+          animation-duration: 26s;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .ken-burns-aura {
+          animation: none !important;
+          transform: none !important;
+        }
+      }
+    `;
+
+    document.head.appendChild(estilos);
+
+    const imagenes = Array.from(
+      document.querySelectorAll("img")
+    ).filter(imagen => {
+      const src = (imagen.getAttribute("src") || "").toLowerCase();
+      const clase = imagen.className?.toString().toLowerCase() || "";
+
+      const esLogo =
+        src.includes("logo") ||
+        clase.includes("logo");
+
+      const estaDentroDePanel =
+        imagen.closest("#panel-educativo-especie") ||
+        imagen.closest("#transicion-cinematografica");
+
+      const esImagenPrincipal =
+        src.includes(".jpg") ||
+        src.includes(".jpeg") ||
+        src.includes(".webp") ||
+        src.includes(".png");
+
+      return (
+        esImagenPrincipal &&
+        !esLogo &&
+        !estaDentroDePanel
+      );
+    });
+
+    const imagenPrincipal =
+      imagenes.find(imagen => {
+        const rectangulo = imagen.getBoundingClientRect();
+
+        return (
+          rectangulo.width > window.innerWidth * 0.45 &&
+          rectangulo.height > window.innerHeight * 0.45
+        );
+      }) || imagenes[0];
+
+    if (!imagenPrincipal) {
+      return;
+    }
+
+    imagenPrincipal.classList.add("ken-burns-aura");
+
+    const contenedorImagen = imagenPrincipal.parentElement;
+
+    if (contenedorImagen) {
+      const estilosContenedor =
+        window.getComputedStyle(contenedorImagen);
+
+      if (estilosContenedor.overflow === "visible") {
+        contenedorImagen.style.overflow = "hidden";
+      }
+    }
+
+    document.addEventListener("visibilitychange", () => {
+      imagenPrincipal.style.animationPlayState =
+        document.hidden ? "paused" : "running";
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener(
+      "DOMContentLoaded",
+      iniciarEfectoKenBurns
+    );
+  } else {
+    iniciarEfectoKenBurns();
+  }
+})();
