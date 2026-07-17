@@ -991,3 +991,226 @@ audio.addEventListener('ended', () => {
     crearPantallaFinal();
   }
 })();
+/* =====================================================
+   FASE 3A — TRANSICIONES CINEMATOGRÁFICAS
+===================================================== */
+
+(() => {
+  function iniciarTransicionesCinematograficas() {
+    const rutaActual = window.location.pathname.toLowerCase();
+
+    const esPaginaDeEspecie = [
+      "carpintero-negro",
+      "puma",
+      "flamenco",
+      "condor",
+      "guanaco",
+      "martin-pescador"
+    ].some(especie => rutaActual.includes(especie));
+
+    if (
+      !esPaginaDeEspecie ||
+      document.querySelector("#transicion-cinematografica")
+    ) {
+      return;
+    }
+
+    const estilos = document.createElement("style");
+
+    estilos.id = "estilos-transicion-cinematografica";
+
+    estilos.textContent = `
+      .transicion-cinematografica {
+        position: fixed;
+        inset: 0;
+        z-index: 50000;
+        display: grid;
+        place-items: center;
+        background: #071009;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transition:
+          opacity 0.55s ease,
+          visibility 0.55s ease;
+      }
+
+      .transicion-cinematografica.activa {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: all;
+      }
+
+      .transicion-contenido {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 24px;
+        opacity: 0;
+        transform: translateY(15px);
+        transition:
+          opacity 0.45s ease 0.12s,
+          transform 0.55s cubic-bezier(.22, 1, .36, 1) 0.12s;
+      }
+
+      .transicion-cinematografica.activa
+      .transicion-contenido {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .transicion-logo {
+        width: min(190px, 50vw);
+        height: auto;
+        object-fit: contain;
+      }
+
+      .transicion-linea {
+        position: relative;
+        width: 120px;
+        height: 2px;
+        overflow: hidden;
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: 999px;
+      }
+
+      .transicion-linea::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: #c7e65b;
+        transform: translateX(-100%);
+      }
+
+      .transicion-cinematografica.activa
+      .transicion-linea::after {
+        animation: avanzarTransicion 0.75s ease forwards;
+      }
+
+      .transicion-texto {
+        color: rgba(255, 255, 255, 0.7);
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+      }
+
+      @keyframes avanzarTransicion {
+        from {
+          transform: translateX(-100%);
+        }
+
+        to {
+          transform: translateX(0);
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .transicion-cinematografica,
+        .transicion-contenido {
+          transition-duration: 0.15s;
+        }
+
+        .transicion-linea::after {
+          animation: none !important;
+          transform: translateX(0);
+        }
+      }
+    `;
+
+    document.head.appendChild(estilos);
+
+    const transicion = document.createElement("div");
+
+    transicion.id = "transicion-cinematografica";
+    transicion.className = "transicion-cinematografica";
+    transicion.setAttribute("aria-hidden", "true");
+
+    transicion.innerHTML = `
+      <div class="transicion-contenido">
+
+        <img
+          src="../logo.png"
+          alt="Aura Textil"
+          class="transicion-logo"
+        >
+
+        <div class="transicion-linea"></div>
+
+        <p class="transicion-texto">
+          Habitantes de la Patagonia
+        </p>
+
+      </div>
+    `;
+
+    document.body.appendChild(transicion);
+
+    let navegacionEnCurso = false;
+
+    function abrirNuevaPagina(direccion) {
+      if (navegacionEnCurso) {
+        return;
+      }
+
+      navegacionEnCurso = true;
+
+      transicion.classList.add("activa");
+      transicion.setAttribute("aria-hidden", "false");
+
+      setTimeout(() => {
+        window.location.href = direccion;
+      }, 750);
+    }
+
+    document.addEventListener("click", evento => {
+      const enlace = evento.target.closest("a");
+
+      if (!enlace) {
+        return;
+      }
+
+      const direccionOriginal = enlace.getAttribute("href");
+
+      if (
+        !direccionOriginal ||
+        direccionOriginal.startsWith("#") ||
+        direccionOriginal.startsWith("mailto:") ||
+        direccionOriginal.startsWith("tel:") ||
+        enlace.target === "_blank" ||
+        enlace.hasAttribute("download")
+      ) {
+        return;
+      }
+
+      const destino = new URL(enlace.href, window.location.href);
+
+      if (destino.origin !== window.location.origin) {
+        return;
+      }
+
+      if (destino.href === window.location.href) {
+        return;
+      }
+
+      evento.preventDefault();
+      abrirNuevaPagina(destino.href);
+    });
+
+    window.addEventListener("pageshow", () => {
+      navegacionEnCurso = false;
+      transicion.classList.remove("activa");
+      transicion.setAttribute("aria-hidden", "true");
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener(
+      "DOMContentLoaded",
+      iniciarTransicionesCinematograficas
+    );
+  } else {
+    iniciarTransicionesCinematograficas();
+  }
+})();
