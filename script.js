@@ -2283,3 +2283,34 @@ audio.addEventListener('ended', () => {
     iniciarFichasDeEspecies();
   }
 })();
+/* =====================================================
+   CARGAR REPRODUCTOR PREMIUM
+===================================================== */
+
+(() => {
+  const rutaActual = window.location.pathname.toLowerCase();
+
+  const esPaginaDeEspecie = [
+    "carpintero-negro",
+    "puma",
+    "flamenco",
+    "condor",
+    "guanaco",
+    "martin-pescador"
+  ].some(especie => rutaActual.includes(especie));
+
+  if (
+    !esPaginaDeEspecie ||
+    document.querySelector('script[data-aura-player]')
+  ) {
+    return;
+  }
+
+  const scriptPlayer = document.createElement("script");
+
+  scriptPlayer.src = "../player.js";
+  scriptPlayer.defer = true;
+  scriptPlayer.dataset.auraPlayer = "true";
+
+  document.body.appendChild(scriptPlayer);
+})();
