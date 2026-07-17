@@ -2345,3 +2345,34 @@ audio.addEventListener('ended', () => {
 
   document.body.appendChild(scriptMapa);
 })();
+/* =====================================================
+   CARGAR CIERRE PATAGONIA SALVAJE
+===================================================== */
+
+(() => {
+  const rutaActual = window.location.pathname.toLowerCase();
+
+  const esPaginaDeEspecie = [
+    "carpintero-negro",
+    "puma",
+    "flamenco",
+    "condor",
+    "guanaco",
+    "martin-pescador"
+  ].some(especie => rutaActual.includes(especie));
+
+  if (
+    !esPaginaDeEspecie ||
+    document.querySelector('script[data-aura-coleccion]')
+  ) {
+    return;
+  }
+
+  const scriptColeccion = document.createElement("script");
+
+  scriptColeccion.src = "../coleccion.js";
+  scriptColeccion.defer = true;
+  scriptColeccion.dataset.auraColeccion = "true";
+
+  document.body.appendChild(scriptColeccion);
+})();
