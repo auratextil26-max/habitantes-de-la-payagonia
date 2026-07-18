@@ -16,6 +16,58 @@
   <title>Habitantes de la Patagonia | Aura Textil</title>
   
   <style>
+    
+  .page-loader{
+    position:fixed;
+    inset:0;
+    background:#07100a;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    z-index:99999;
+    transition:opacity .9s ease, visibility .9s ease;
+}
+
+.page-loader.hide{
+    opacity:0;
+    visibility:hidden;
+}
+
+.loader-content{
+    text-align:center;
+    color:white;
+    animation:loaderFade 1.2s ease;
+}
+
+.loader-logo{
+    width:130px;
+    margin-bottom:28px;
+}
+
+.loader-content h1{
+    font-family:Georgia, serif;
+    font-size:48px;
+    font-weight:400;
+    margin-bottom:16px;
+}
+
+.loader-content p{
+    color:#b9c4bb;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    font-size:13px;
+}
+
+@keyframes loaderFade{
+    from{
+        opacity:0;
+        transform:translateY(15px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
     html {
     scroll-behavior: smooth;
 }
