@@ -836,7 +836,24 @@
     <p>
       Patagonia Chilena
     </p>
-  </footer>
+</footer>
+
+<script>
+  const botonHero = document.querySelector(".hero-button");
+  const seccionEspecies = document.querySelector("#especies");
+
+  if (botonHero && seccionEspecies) {
+    botonHero.addEventListener("click", function (evento) {
+      evento.preventDefault();
+
+      seccionEspecies.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+    });
+  }
+</script>
 
 </body>
 </html>
+
